@@ -1,0 +1,32 @@
+---
+title: "s RWorksheet#5_group(number)"
+author: "Christian Porras"
+date: "2023-11-29"
+output: pdf_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+```{r}
+library(rvest)
+library(dplyr)
+library(polite)
+
+url <- 'https://www.imdb.com/chart/toptv/?ref_=nv_tvv_250'
+
+# asking permission to scrape
+session <- bow(url,
+               user_agent = "Educational")
+session
+
+for (i in 1:50)
+{
+  titlelist <- scrape(session) %>%
+  html_nodes('h3.ipc-title__text') %>%
+  html_text
+  
+  titles <- data.frame(titlelist)
+  titles
+}
+```
