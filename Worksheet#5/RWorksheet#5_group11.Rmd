@@ -1,0 +1,63 @@
+---
+title: "s RWorksheet#5_group(number)"
+author: "Christian Porras"
+date: "2023-11-29"
+output: pdf_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+
+```{r}
+library(rvest)
+library(dplyr)
+library(polite)
+library(httr)
+
+
+url <- 'https://www.imdb.com/chart/toptv/?ref_=nv_tvv_250'
+
+# asking permission to scrape
+session <- bow(url,
+               user_agent = "Educational")
+session
+
+
+  titlelist <- scrape(session) %>%
+  html_nodes('h3.ipc-title__text') %>%
+  html_text
+  
+  titles <- as.data.frame(titlelist[2:51])
+  titles
+  
+
+  link_list <- scrape(session) %>%
+  html_nodes('a.ipc-title-link-wrapper') %>% 
+  html_attr('href') 
+
+head(link_list)
+
+
+link <- as.vector(link_list[2:50])
+names(link) <- "links"
+
+head(link)
+tail(link)
+
+
+  rankings <- scrape(session) %>%
+  html_nodes('h3.ipc-simple-select__input') %>%
+  html_text
+  
+    
+  session2 <- bow(url,
+                  user_agent = "Educational")
+  
+
+ reviews_link <- scrape(session2) %>%
+    html_nodes('a.ipc-title-link-wrapper') %>% 
+    html_attr('href')
+ 
+```
